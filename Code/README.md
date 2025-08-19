@@ -6,4 +6,5 @@ Code to prep FACTS data and then merge it with NURSERY data and PLANTING LOCS.
 5. Extract TopoTerra data from OSF and merge with STDsf - Output File: SeedTransferData_OSFclim_Aug2025.rds
 6. Build density plots with TopoTerra data - Output Files: STDsf_sorted_by_geodist.csv & 6pan_geoclim.png
 7. Build interactive mapdeck - Output file: tree_transfer_map_NSD.html
-8. Build dataset with survival data - *in progress*
+8. Conceptual figure
+9. Build dataset with survival data - *in progress*
