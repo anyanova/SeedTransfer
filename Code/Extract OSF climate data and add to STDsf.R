@@ -53,3 +53,31 @@ for (var_name in climate_vars) {
 setwd("/Volumes/GoogleDrive/My Drive/Seed Transfer Project/Data/Merging")
 saveRDS(STDsf, "SeedTransferData_OSFclim_Aug2025.rds")
 
+
+
+#####################
+#####################
+###Explore and plot##
+#####################
+STDsf$elev_diff<-STDsf$Elevation_PlantingLoc - STDsf$SeedElevation
+hist(STDsf$elev_diff)
+summary(STDsf$elev_diff)
+#view(STDsf %>%   filter(elev_diff > 1500))
+
+
+STDsfev<-STDsf[STDsf$elev_diff<0,]
+table(STDsfev$Region)
+
+##Seed elevation vs planted quick look
+ggplot(STDsf, aes(SeedElevation,Elevation_PlantingLoc)) + 
+  geom_point() + geom_smooth(method="lm")
+
+STDsf$SeedElevation<-as.numeric(STDsf$SeedElevation)
+STDsf$PlantedElevation<-as.numeric(STDsf$Elevation_PlantingLoc)
+STDsf$nPlanted<-as.numeric(STDsf$nPlanted)
+STDsf$Survival_1<-as.numeric(STDsf$Survival_1)
+
+#Simplified dataset for plotting (no geometry)
+STDsf %>%  filter(nPlanted >= 1) %>%
+  select(PlantedElevation, SeedElevation, Survival_1, nPlanted, elev_diff, Species) -> plot_data
+

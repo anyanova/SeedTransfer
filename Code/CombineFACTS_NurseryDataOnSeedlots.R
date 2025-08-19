@@ -28,7 +28,7 @@ package.list <- c("here", "tidyverse", "sf", "readxl", "stringdist","data.table"
   dim(FS)
 
 ##Aug 15th change - Exclude rows that don't specify nursery from FACTS data
-table(FS$NurseryCode)  
+table(FS$NurseryCode, useNA="always")  
 FS<-FS[NurseryCode!=""]
   
   
@@ -101,8 +101,8 @@ dim(MS)
 length(unique(MS$Seedlot))
 length(unique(MS$ID))
 length(unique(MS$SUID_OG)) 
-table(MS$Nursery) #From all 3 nurseries
-table(MS$SeedlotSpp)
+table(MS$Nursery, useNA="always") #From all 3 nurseries
+table(MS$SeedlotSpp, useNA="always")
 length(MS$SeedlotSpp)
 table(MS$Region)
 

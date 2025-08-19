@@ -79,7 +79,8 @@ length(unique(FM$Seedlot))
       DateSeedCollected = as.Date(DateSeedCollected, format = "%d-%b-%y"),
       DateSeedTest = as.Date(DateSeedTest, format = "%d-%b-%y"),
       Region = as.character(Region),
-      SeedLAT = as.numeric(SeedLAT))
+      SeedLAT = as.numeric(SeedLAT),
+      NurseryCode="MARSHALL")
   
   Marshall<- st_transform(Marshall, crs = "EPSG:4326")
   FM$Region<-as.character(FM$Region)
@@ -97,7 +98,8 @@ length(unique(FM$Seedlot))
       DateSeedTest = as.Date(DateSeedTest, format = "%d-%b-%y"),
       PlantingDate = as.Date(PlantingDate, format = "%Y-%m-%d"),
       Region = as.character(Region),
-      SeedLAT = as.numeric(SeedLAT))%>%
+      SeedLAT = as.numeric(SeedLAT),
+      NurseryCode="BES") %>%
       select(-SUID) #duplicate to ID
   
   Nebraska<- st_transform(Nebraska, crs = "EPSG:4326")
@@ -137,6 +139,8 @@ STD2 %>%
   summarise(UniqueSeedlotCount = n_distinct(Seedlot, na.rm = TRUE),
   .groups = 'drop' ) %>%  
   arrange(Region)
+
+table(STD2$NurseryCode, useNA = "always")
 
 ##SAVE CSV AND WORKSPACE
 setwd("/Volumes/GoogleDrive/My Drive/Seed Transfer Project/Data/Merging")

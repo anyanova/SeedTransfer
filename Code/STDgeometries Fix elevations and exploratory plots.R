@@ -10,14 +10,24 @@ for(i in package.list){library(i, character.only = T)}
 
 ##Manually add elevations using elevatr package and point data
 #Make STD a SF format
-STD <- readRDS("/Volumes/GoogleDrive/My Drive/Seed Transfer Project/Data/Merging/SeedTransferData_Aug2025.rds")
+STD<- readRDS("/Volumes/GoogleDrive/My Drive/Seed Transfer Project/Data/Merging/SeedTransferData_Aug2025.rds")
 STDsf <- st_as_sf(STD)
 
-invalid_indices <- which(!st_is_valid(STDsf, reason = FALSE))
-STDsf[invalid_indices, ] <- st_make_valid(STDsf[invalid_indices, ])
+#Make sure all long are negative
+STDsf <- STDsf %>% mutate(
+  SeedLONG = ifelse(SeedLONG > 0, -SeedLONG, SeedLONG))
+
+STDsf <- STDsf %>%
+  # Check for and fix invalid geometries
+  mutate(geometry = st_make_valid(geometry)) %>%
+  # Calculate centroids for all geometries
+  mutate(centroid_PlantingLoc = st_centroid(geometry))
+
+STDsf<-st_transform(STDsf, 4326)
 
 class(STDsf)
 dim(STDsf)
+
 
 # Calculate planting loc centroids, isolate point data == geometry
 for (i in 1:nrow(STDsf)) {
@@ -29,7 +39,6 @@ for (i in 1:nrow(STDsf)) {
 
 STDsf
 
-
 ##Bring in elevation for planting locations
   # Extract the list of coordinates
     coords_PlantingLocs <- STDsf$centroid_PlantingLoc
@@ -38,7 +47,6 @@ STDsf
     coords_df<- coords_df[complete.cases(coords_df), ]
     colnames(coords_df) <- c("x", "y") # Explicitly name them
     
-  # Get elevation data using the coordinate data frame
     coord_crs <- sf::st_crs(4326)
     elevation_data <- elevatr::get_elev_point(coords_df, prj = coord_crs, units="meters")
     
@@ -118,9 +126,6 @@ STDsf <- STDsf %>%
    SeedLONG = coalesce(new_SeedLONG, SeedLONG)  ) %>% 
   select(-new_SeedLAT, -new_SeedLONG)
 
-#Make it negative
-STDsf <- STDsf %>% mutate(
-    SeedLONG = ifelse(SeedLONG > 0, -SeedLONG, SeedLONG))
 
 ##SAVE CSV AND WORKSPACE
 setwd("~/Google Drive/My Drive/Seed Transfer Project/Data/Merging")

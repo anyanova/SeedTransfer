@@ -29,8 +29,14 @@ STDsf$Tmin_Diff<- STDsf$tmin_Planting - STDsf$tmin_Seed
   planting_coords <- cbind(STDsf$centroid_PlantingLoc_LONG, STDsf$centroid_PlantingLoc_LAT)
   #New column with distances between planting and seed   
   STDsf$GeographicalDistance_km <- diag(geodist(x = seed_coords, y = planting_coords, measure = "haversine"))/1000
+  
+###What seedlots have the greatest geodist?
+view(STDsf %>% arrange(-GeographicalDistance_km))
 
-
+#Remove weird match that crosses Bessey x CDA
+#STDsf %>% 
+  
+    
 
 # --- 1. Define the Difference Columns to Plot ---
 diff_plot_columns <- c("Elev_Diff","GeographicalDistance_km","Tmax_Diff","Tmin_Diff","CWD_Diff","AET_Diff")
@@ -206,3 +212,13 @@ setwd("/Volumes/GoogleDrive/My Drive/Seed Transfer Project/Figures")
 ggsave("6pan_geoclim.pdf",combined_plots, width=7, height=5.5, units="in")
 ggsave("6pan_geoclim.svg",combined_plots, width=7, height=5.5, units="in")
 ggsave("6pan_geoclim.png",combined_plots, width=7, height=5.5, units="in")
+
+
+
+
+
+
+
+
+
+
